@@ -1,0 +1,24 @@
+environments:
+  env1:
+    args_sets:
+      deployment:
+      - dep_arg1
+      - dep_arg2
+      - dep_arg3
+      job:
+      - job_arg1
+      - job_arg2
+      - job_arg3
+    exposed_port: 5432
+
+  env2:
+    args_sets:
+      deployment:
+      - dep_arg1
+      - dep_arg2
+      - dep_arg3
+      job:
+      - job_arg1
+      - job_arg2
+      - job_arg3
+    exposed_port: 5432

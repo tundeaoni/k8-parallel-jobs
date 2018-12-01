@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ name }}{{ job_suffix}}
+spec:
+  template:
+    metadata:
+      name: {{ name }}{{ job_suffix }}
+    spec:
+      containers:
+      - name: counter
+        image: node
+        command:
+        {% for arg in argument_sets['job'] %}
+         - {{ arg }}
+        {% endfor %}
+      restartPolicy: Never

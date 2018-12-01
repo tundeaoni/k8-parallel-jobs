@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ name }}{{ deployment_suffix }}
+  labels:
+    app: {{ name }}{{ deployment_suffix }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ name }}{{ deployment_suffix }}
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.15.4
+        command:
+        {% for arg in argument_sets['deployment'] %}
+         - {{ arg }}
+        {% endfor %}
+        ports:
+        - containerPort: {{ exposed_port }}
