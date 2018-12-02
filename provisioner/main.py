@@ -53,6 +53,11 @@ def provision():
 def delete_all():
     kube.delete_all()
 
+def check_dependency(name):
+    if util.is_tool(name) == False:
+        print("Error: {} is a requiste to run this tool.".format(name))
+        sys.exit(1)
+
 
 # generate deployment , service then create job
 
@@ -61,6 +66,9 @@ if __name__ == "__main__":
         util.usage()
         sys.exit(0)
 
+    for dependency in ["kubectl"]:
+        check_dependency(dependency)
+
     subCommand = sys.argv[1]
     args = sys.argv[2:]
 
@@ -68,7 +76,7 @@ if __name__ == "__main__":
         util.usage()
     elif subCommand in ("provision"):
         provision()
-    elif subCommand in ("delete_all"):
+    elif subCommand in ("demolish"):
         delete_all()
     else:
         print "'" + subCommand + "' is not a recognised sub-command. Use the help command to see available sub-commands  \n"

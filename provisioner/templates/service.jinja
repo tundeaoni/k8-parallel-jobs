@@ -1,15 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ name }}{{ service_prefix }}
+  name: {{ name }}{{ service_suffix }}
   labels:
     app: {{ name }}
-    deployment_name: {{ name }}{{ deployment_prefix }}
+    deployment_name: {{ name }}{{ deployment_suffix }}
 spec:
   ports:
   - port: {{ exposed_port }}
     protocol: TCP
   selector:
-    app: {{ name }}{{ deployment_prefix }}
-
-
+    app: {{ name }}{{ deployment_suffix }}

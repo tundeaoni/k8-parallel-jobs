@@ -8,10 +8,13 @@ spec:
       name: {{ name }}{{ job_suffix }}
     spec:
       containers:
-      - name: counter
-        image: node
-        command:
-        {% for arg in argument_sets['job'] %}
-         - {{ arg }}
-        {% endfor %}
+      - name: processor
+        image: postgres
+        env:
+          - name: SERVICE_URL
+            value: {{ name }}{{ service_suffix }}
+          - name: SERVICE_EXPOSED_PORT
+            value: "{{ exposed_port }}"
+        command: ["/bin/bash"]
+        args: [ {{ ",".join(argument_sets['job']) }} ]
       restartPolicy: Never

@@ -6,4 +6,4 @@ def start(manifest):
     os.remove(temp_file)
 
 def delete_all():
-    os.system("kubectl delete $(kubectl get po | awk '{print $1}' | grep -v \"NAME\")")
+    os.system("kubectl delete $(kubectl get all --namespace=default | awk '{print $1}' | grep -v \"NAME\")")

@@ -1,5 +1,6 @@
-import yaml,sys
+import yaml,sys , os
 from jinja2 import Template
+# from whichcraft import which
 
 def usage():
     scriptName = sys.argv[0]
@@ -8,6 +9,8 @@ def usage():
     print "  " + scriptName + " help  \n"
     print "provision : "
     print "  " + scriptName + " provision  \n"
+    print "demolish : "
+    print "  " + scriptName + " demolish  \n"
 
 def fromYaml(sourceFile):
     with open(sourceFile, "r") as stream:
@@ -43,3 +46,8 @@ def render(template_file , values):
     # t  = Template(content)
     return Template(content).stream(values)
     # return t.render(values)
+
+def is_tool(name):
+    response = "which {}".format(name)
+    returnCode = os.system(response)
+    return not bool(returnCode)
