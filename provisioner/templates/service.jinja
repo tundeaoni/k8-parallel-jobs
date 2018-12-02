@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ name }}{{ service_suffix }}
   labels:
-    app: {{ name }}
+    group_id: {{ name }}
     deployment_name: {{ name }}{{ deployment_suffix }}
 spec:
   ports:

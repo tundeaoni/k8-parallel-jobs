@@ -5,5 +5,8 @@ def start(manifest):
     os.system("kubectl apply -f {}".format(temp_file))
     os.remove(temp_file)
 
+def create_from_file(location):
+    os.system("kubectl apply -f {}".format(location))
+
 def delete_all():
     os.system("kubectl delete $(kubectl get all --namespace=default | awk '{print $1}' | grep -v \"NAME\")")

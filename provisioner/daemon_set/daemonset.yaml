@@ -1,0 +1,19 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: garbage-collector
+spec:
+  template:
+    metadata:
+      labels:
+        app: garbage-collector
+      name: garbage-collector
+    spec:
+      containers:
+      - image: tundeaoni/garbage-collector:latest
+        name: garbage-collector
+        ports:
+          - containerPort: 8080
+            name: gc-port
+            protocol: TCP

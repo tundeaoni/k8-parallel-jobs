@@ -9,6 +9,7 @@ def provision():
     deployment_suffix = constants.DEPLOYMENT_SUFFIX
     services_suffix = constants.SERVICES_SUFFIX
     job_suffix = constants.JOBS_SUFFIX
+    garbage_collector = constants.GARBAGE_COLLECTOR
 
     if os.path.isfile(config_file) == False:
         print "config file (config.yaml) missing in current directory"
@@ -29,8 +30,13 @@ def provision():
             "job_suffix": job_suffix ,\
             "group_id": environment , \
             "exposed_port": exposed_port ,\
+            "garbage_collector": garbage_collector ,\
             "argument_sets": config[environments_config_key][environment][constants.ARGS_KEY]
         }
+
+        # create garabage collector
+        print "-- Creating garabage collector"
+        kube.create_from_file(constants.DAEMON_SET_CONFIG_LOCATION)
 
         # create service
         print "-- Creating service for {}".format(environment)

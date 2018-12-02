@@ -4,6 +4,7 @@ metadata:
   name: {{ name }}{{ deployment_suffix }}
   labels:
     app: {{ name }}{{ deployment_suffix }}
+    group_id: {{ name }}
 spec:
   replicas: 1
   template:
@@ -11,6 +12,7 @@ spec:
       name: {{ name }}{{ deployment_suffix }}
       labels:
         app: {{ name }}{{ deployment_suffix }}
+        group_id: {{ name }}
     spec:
       containers:
       - name: database
@@ -18,6 +20,8 @@ spec:
         ports:
         - containerPort: {{ exposed_port }}
         env:
+        - name: GARBAGE_COLLECTOR_URL
+          value: {{ garbage_collector }}
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -27,6 +31,8 @@ spec:
         command: ["/bin/bash"]
         args: [ {{ ",".join(argument_sets['deployment']) }} ]
         env:
+        - name: GARBAGE_COLLECTOR_URL
+          value: {{ garbage_collector }}
         - name: POD_NAME
           valueFrom:
             fieldRef:

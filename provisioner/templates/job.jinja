@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ name }}{{ job_suffix}}
+  labels:
+    group_id: {{ name }}
 spec:
   template:
     metadata:
@@ -15,6 +17,8 @@ spec:
             value: {{ name }}{{ service_suffix }}
           - name: SERVICE_EXPOSED_PORT
             value: "{{ exposed_port }}"
+          - name: GARBAGE_COLLECTOR_URL
+            value: {{ garbage_collector }}
         command: ["/bin/bash"]
         args: [ {{ ",".join(argument_sets['job']) }} ]
       restartPolicy: Never
