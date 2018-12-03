@@ -1,5 +1,4 @@
 altgraph==0.10.2
-ansible==2.2.2.0
 asn1crypto==0.22.0
 astroid==1.6.5
 backports.functools-lru-cache==1.5
@@ -32,7 +31,6 @@ modulegraph==0.10.4
 numpy==1.8.0rc1
 oauth2client==4.1.2
 packaging==16.8
-paramiko==2.1.2
 parse==1.8.4
 parse-type==0.4.2
 pathspec==0.5.9
@@ -40,7 +38,6 @@ py2app==0.7.3
 pyasn1==0.3.2
 pyasn1-modules==0.0.11
 pycparser==2.17
-pycrypto==2.6.1
 PyHamcrest==1.9.0
 pylint==1.9.3
 pyobjc-core==2.5.1
@@ -83,7 +80,6 @@ pyparsing==2.0.1
 python-dateutil==1.5
 pytz==2013.7
 PyYAML==3.12
-requests==2.19.1
 rsa==3.4.2
 scipy==0.13.0b1
 singledispatch==3.4.0.3
