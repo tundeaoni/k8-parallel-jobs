@@ -48,6 +48,6 @@ def render(template_file , values):
     # return t.render(values)
 
 def is_tool(name):
-    response = "which {}".format(name)
+    response = "whereis {}".format(name)
     returnCode = os.system(response)
     return not bool(returnCode)

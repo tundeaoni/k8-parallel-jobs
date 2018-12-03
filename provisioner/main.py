@@ -10,6 +10,7 @@ def provision():
     services_suffix = constants.SERVICES_SUFFIX
     job_suffix = constants.JOBS_SUFFIX
     garbage_collector = constants.GARBAGE_COLLECTOR
+    garbage_collector_url = constants.GARBAGE_COLLECTOR_URL
 
     if os.path.isfile(config_file) == False:
         print "config file (config.yaml) missing in current directory"
@@ -31,6 +32,7 @@ def provision():
             "group_id": environment , \
             "exposed_port": exposed_port ,\
             "garbage_collector": garbage_collector ,\
+            "garbage_collector_url": garbage_collector_url , \
             "argument_sets": config[environments_config_key][environment][constants.ARGS_KEY]
         }
 

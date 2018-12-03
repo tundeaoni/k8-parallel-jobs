@@ -21,7 +21,9 @@ spec:
         - containerPort: {{ exposed_port }}
         env:
         - name: GARBAGE_COLLECTOR_URL
-          value: {{ garbage_collector }}
+          value: {{ garbage_collector_url }}
+        - name: GROUP_ID
+          value: {{ name }}
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -32,7 +34,9 @@ spec:
         args: [ {{ ",".join(argument_sets['deployment']) }} ]
         env:
         - name: GARBAGE_COLLECTOR_URL
-          value: {{ garbage_collector }}
+          value: {{ garbage_collector_url }}
+        - name: GROUP_ID
+          value: {{ name }}
         - name: POD_NAME
           valueFrom:
             fieldRef:

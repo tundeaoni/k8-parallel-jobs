@@ -18,7 +18,9 @@ spec:
           - name: SERVICE_EXPOSED_PORT
             value: "{{ exposed_port }}"
           - name: GARBAGE_COLLECTOR_URL
-            value: {{ garbage_collector }}
+            value: {{ garbage_collector_url }}
+          - name: GROUP_ID
+            value: {{ name }}
         command: ["/bin/bash"]
         args: [ {{ ",".join(argument_sets['job']) }} ]
       restartPolicy: Never
