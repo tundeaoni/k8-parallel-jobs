@@ -1,9 +1,10 @@
 from kube import Kube
 from BaseHTTPServer import HTTPServer
 from BaseHTTPServer import BaseHTTPRequestHandler
-import cgi
-import json
+import cgi, traceback ,json , logging
 
+logging.basicConfig(level=logging.INFO)
+#  curl -X POST $GARBAGE_COLLECTOR_URL -H 'content-type: application/json' -d "{  \"label\": \"group_id=$GROUP_ID\" }"
 class RestHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         data = cgi.FieldStorage(fp=self.rfile,
@@ -13,12 +14,14 @@ class RestHTTPRequestHandler(BaseHTTPRequestHandler):
                            })
         try:
             data = json.loads(data.value)
+            print data
             label = data["label"]
             kubeClient = Kube()
             kubeClient.deleteResources(label)
             response_code = 200
             response = "{}"
-        except:
+        except Exception:
+            traceback.print_exc()
             response_code = 500
             response = '{"error": "operation unsuccessful"}'
 
