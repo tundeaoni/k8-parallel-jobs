@@ -1,6 +1,6 @@
 ### Introduction
 Kubernetes resoures are logically grouped with the intention to independently reference and management them.
-
+<!-- 
 ├── README.md
 ├── garbage-collector
 │   ├── Dockerfile
@@ -24,7 +24,7 @@ Kubernetes resoures are logically grouped with the intention to independently re
     │   ├── deployment.jinja
     │   ├── job.jinja
     │   └── service.jinja
-    ├── util.py
+    ├── util.py -->
 
 ### Requirements
 - Kubectl 
