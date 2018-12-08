@@ -1,0 +1,6 @@
+# use this file to create a a file named `auth-config.yml`
+# the created file is used to autheniticate for a docker private repository
+server: "server-url"
+username: "username"
+password: "password"
+email: "user email"

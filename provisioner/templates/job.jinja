@@ -10,17 +10,27 @@ spec:
       name: {{ name }}{{ job_suffix }}
     spec:
       containers:
-      - name: processor
-        image: postgres
+      - name: seeder
+        image: dovlex/mercury:thorp
         env:
           - name: SERVICE_URL
             value: {{ name }}{{ service_suffix }}
+          - name: DB_HOST
+            value: {{ name }}{{ service_suffix }}
           - name: SERVICE_EXPOSED_PORT
-            value: "{{ exposed_port }}"
+            value: "{{ exposed_port_to_job }}"
           - name: GARBAGE_COLLECTOR_URL
             value: {{ garbage_collector_url }}
           - name: GROUP_ID
             value: {{ name }}
+          {% for env in job_envs %}
+          - name: {{ env }}
+            value: "{{ job_envs[env] }}"
+          {% endfor %}
         command: ["/bin/bash"]
         args: [ {{ ",".join(argument_sets['job']) }} ]
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/bash","-c", "curl -X POST $GARBAGE_COLLECTOR_URL -H 'content-type: application/json' -d \"{  \"label\": \"group_id=$GROUP_ID\" }\""]
       restartPolicy: Never

@@ -1,20 +1,56 @@
-environments:
-  env1:
-    exposed_port: 5432
-    args_sets:
-      deployment:
-      - -c
-      - "\"psql -h 127.0.0.1 -p 5432  -U postgres -tAc \\\"CREATE TABLE IF NOT EXISTS sample ( message TEXT NOT NULL); INSERT INTO sample (message) VALUES ('Hello, world $$POD_NAME');\\\" && sleep 600 \""
-      job:
-      - -c
-      - "\"for i in {1..5}; do psql -U postgres -h $SERVICE_URL -tAc 'SELECT * FROM sample' && sleep 3; done\""
+# specify 1 or more environments to be created by the provision command
 
-  env2:
-    exposed_port: 5432
+environments:
+  # example
+  # unique name:
+  #   exposed_port_to_job: 9092
+  #   exposed_port:
+  #   - 9092
+  #   - 8082
+  #   - 8080
+  #   job_env:
+  #     START_DATE: "start date "
+  #     END_DATE: "end date"
+  #   args_sets:
+  #     deployment:
+  #     - -c
+  #     - "\"\""
+  #     job:
+  #     - -c
+  #     - "\" java $JAVA_OPTS -Ddb=h2 -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:/dev/./urandom -jar /app.jar -s SPX -r $START_DATE $END_DATE \""
+
+  spx20180201:
+    exposed_port_to_job: 9092
+    exposed_port:
+    - 9092
+    - 8082
+    - 8080
+    job_env:
+      START_DATE: "2018-01-01"
+      END_DATE: "2018-02-01"
+      EQUITY: "SPX"
     args_sets:
       deployment:
       - -c
-      - "\"psql -h 127.0.0.1 -p 5432  -U postgres -tAc \\\"CREATE TABLE IF NOT EXISTS sample ( message TEXT NOT NULL); INSERT INTO sample (message) VALUES ('Hello, mars $$POD_NAME');\\\" && sleep 600 \""
+      - "\"\""
       job:
       - -c
-      - "\"for i in {1..5}; do psql -U postgres -h $SERVICE_URL -p $SERVICE_EXPOSED_PORT -tAc 'SELECT * FROM sample' && sleep 3; done\""
+      - "\" java $JAVA_OPTS -Ddb=h2 -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:/dev/./urandom -jar /app.jar -s $EQUITY -r $START_DATE $END_DATE \""
+
+  vxx20180301:
+    exposed_port_to_job: 9092
+    exposed_port:
+    - 9092
+    - 8082
+    - 8080
+    job_env:
+      START_DATE: "2018-01-01"
+      END_DATE: "2018-02-01"
+      EQUITY: "SPX"
+    args_sets:
+      deployment:
+      - -c
+      - "\"\""
+      job:
+      - -c
+      - "\" java $JAVA_OPTS -Ddb=h2 -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:/dev/./urandom -jar /app.jar -s $EQUITY -r $START_DATE $END_DATE \""

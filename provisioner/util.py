@@ -10,7 +10,7 @@ def usage():
     print "provision : "
     print "  " + scriptName + " provision  \n"
     print "demolish : "
-    print "  " + scriptName + " demolish  \n"
+    print "  " + scriptName + " demolish [environment] \n"
 
 def fromYaml(sourceFile):
     with open(sourceFile, "r") as stream:

@@ -7,7 +7,10 @@ metadata:
     deployment_name: {{ name }}{{ deployment_suffix }}
 spec:
   ports:
-  - port: {{ exposed_port }}
+  {% for exposed_port in exposed_ports %}
+  - port: {{ exposed_port}}
+    name: port-{{ exposed_port}}
     protocol: TCP
+  {% endfor %}
   selector:
     app: {{ name }}{{ deployment_suffix }}

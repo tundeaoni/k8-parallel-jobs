@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -16,9 +17,11 @@ spec:
     spec:
       containers:
       - name: database
-        image: postgres
+        image: thomseno/h2
         ports:
-        - containerPort: {{ exposed_port }}
+        {% for exposed_port in exposed_ports %}
+        - containerPort: {{ exposed_port}}
+        {% endfor %}
         env:
         - name: GARBAGE_COLLECTOR_URL
           value: {{ garbage_collector_url }}
@@ -28,16 +31,64 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-      - name: seeder
-        image: postgres
-        command: ["/bin/bash"]
-        args: [ {{ ",".join(argument_sets['deployment']) }} ]
+        - name: JAVA_OPTS
+          value: "-Xmx1g -Xms256m"
+
+      - name: webapp
+        image: dovlex/mercury:webapp
+        ports:
+        - containerPort: 8080
         env:
         - name: GARBAGE_COLLECTOR_URL
           value: {{ garbage_collector_url }}
         - name: GROUP_ID
           value: {{ name }}
+        - name: DB_HOST
+          value: localhost
         - name: POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: VIRTUAL_HOST
+          value: "mercury-api.nickelandswan.com"
+        - name: VIRTUAL_PORT
+          value: "8080"
+        - name: LETSENCRYPT_HOST
+          value: "mercury-api.nickelandswan.com"
+        - name: LETSENCRYPT_EMAIL
+          value: "dovlex@gmail.com"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ name }}{{ deployment_suffix }}-client
+  labels:
+    app: {{ name }}{{ deployment_suffix }}
+    group_id: {{ name }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: {{ name }}{{ deployment_suffix }}
+      labels:
+        app: {{ name }}{{ deployment_suffix }}
+        group_id: {{ name }}
+    spec:
+      containers:
+      - name: python-client
+        image: tundeaoni/garbage-collector:latest
+        env:
+        - name: GARBAGE_COLLECTOR_URL
+          value: {{ garbage_collector_url }}
+        - name: GROUP_ID
+          value: {{ name }}
+        - name: DB_HOST
+          value: localhost
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: WEB_APP_HOST
+          value: {{ name }}{{ service_suffix }}
+        - name: WEB_APP_HOST_PORT
+          value: "8080"

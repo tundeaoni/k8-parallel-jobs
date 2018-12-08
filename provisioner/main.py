@@ -6,15 +6,28 @@ def provision():
     config_file = constants.CONFIG_FILE
     environments_config_key = constants.ENVIRONMENTS_CONFIG_KEY
     exposed_port_key = constants.EXPOSED_PORT_KEY
+    exposed_port_to_job_key = constants.EXPOSED_PORT_TO_JOB_KEY
     deployment_suffix = constants.DEPLOYMENT_SUFFIX
     services_suffix = constants.SERVICES_SUFFIX
     job_suffix = constants.JOBS_SUFFIX
     garbage_collector = constants.GARBAGE_COLLECTOR
     garbage_collector_url = constants.GARBAGE_COLLECTOR_URL
+    auth_config_file_name = constants.AUTH_CONFIG_FILE_NAME
+    env_config_key = constants.ENV_KEY
 
     if os.path.isfile(config_file) == False:
         print "config file (config.yaml) missing in current directory"
         sys.exit(1)
+
+    if os.path.isfile(auth_config_file_name) == True:
+        print "Setting config to auth to private repository"
+        auth_config = util.fromYaml(auth_config_file_name)
+        server = auth_config[constants.AUTH_SERVER_KEY]
+        username = auth_config[constants.AUTH_USER_NAME_KEY]
+        password = auth_config[constants.AUTH_PASSWORD_KEY]
+        email = auth_config[constants.AUTH_EMAIL_KEY]
+        kube.auth_docker_repo(server, username, password, email)
+
 
     # load config file
     config = util.fromYaml(config_file)
@@ -23,20 +36,28 @@ def provision():
         sys.exit(0)
 
     for environment in config[environments_config_key]:
-        exposed_port = config[environments_config_key][environment][exposed_port_key]
+        environment_details = config[environments_config_key][environment]
+        exposed_port = environment_details[exposed_port_key]
+        exposed_port_to_job = environment_details[exposed_port_to_job_key]
+        envs = {}
+        if env_config_key in environment_details:
+            envs = environment_details[env_config_key]
+
         values = {
             "name": environment , \
             "service_suffix": services_suffix , \
             "deployment_suffix": deployment_suffix ,\
             "job_suffix": job_suffix ,\
             "group_id": environment , \
-            "exposed_port": exposed_port ,\
+            "job_envs": envs ,\
+            "exposed_ports": exposed_port ,\
             "garbage_collector": garbage_collector ,\
             "garbage_collector_url": garbage_collector_url , \
-            "argument_sets": config[environments_config_key][environment][constants.ARGS_KEY]
+            "exposed_port_to_job": exposed_port_to_job, \
+            "argument_sets": environment_details[constants.ARGS_KEY]
         }
 
-        # create garabage collector
+            # create garabage collector
         print "-- Creating garabage collector"
         kube.create_from_file(constants.DAEMON_SET_CONFIG_LOCATION)
 
@@ -58,8 +79,11 @@ def provision():
         # start up job
         kube.start(job)
 
-def delete_all():
-    kube.delete_all()
+def delete_all(environment):
+    label = ""
+    if environment != "":
+        label = "group_id={}".format(environment)
+    kube.delete_all(label)
 
 def check_dependency(name):
     if util.is_tool(name) == False:
@@ -85,6 +109,9 @@ if __name__ == "__main__":
     elif subCommand in ("provision"):
         provision()
     elif subCommand in ("demolish"):
-        delete_all()
+        environment = ""
+        if len(args) > 0:
+            environment = args[0]
+        delete_all(environment)
     else:
         print "'" + subCommand + "' is not a recognised sub-command. Use the help command to see available sub-commands  \n"
