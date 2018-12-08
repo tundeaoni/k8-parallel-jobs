@@ -1,5 +1,6 @@
 ### Introduction
-Kubernetes resoures are logically grouped with the intention to independently reference and management them.
+Kubernetes resoures are logically grouped with the intention to independently reference and management them. 
+Video on getting running in GCP: https://youtu.be/G23MA5j7RLY
 <!-- 
 ├── README.md
 ├── garbage-collector
@@ -54,3 +55,4 @@ The curl request will look like this
 - For using images in a private docker repository create a file named `auth-config.yml` from the file `auth-config.example.yml` and update with the configuration with required values.
 - The templates used for the creation of groups/environments can be found in the `provisioner/template` folder, changes made here would reflect in the definition of resources on subsequent creation.
 - The code for the garbage-collector can be found in the `garbage-collector`.
+
