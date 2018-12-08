@@ -11,13 +11,14 @@ environments:
   #   job_env:
   #     START_DATE: "start date "
   #     END_DATE: "end date"
+  #     EQUITY: "equity name"
   #   args_sets:
   #     deployment:
   #     - -c
   #     - "\"\""
   #     job:
   #     - -c
-  #     - "\" java $JAVA_OPTS -Ddb=h2 -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:/dev/./urandom -jar /app.jar -s SPX -r $START_DATE $END_DATE \""
+  #     - "\" java $JAVA_OPTS -Ddb=h2 -Djava.net.preferIPv4Stack=true -Djava.security.egd=file:/dev/./urandom -jar /app.jar -s $EQUITY -r $START_DATE $END_DATE \""
 
   spx20180201:
     exposed_port_to_job: 9092
