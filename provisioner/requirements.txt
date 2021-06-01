@@ -86,7 +86,7 @@ singledispatch==3.4.0.3
 six==1.11.0
 traceback2==1.4.0
 uritemplate==3.0.0
-urllib3==1.22
+urllib3==1.26.5
 vboxapi==1.0
 virtualenv==15.1.0
 websocket-client==0.44.0
